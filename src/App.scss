@@ -1,0 +1,38 @@
+.logo-area {
+  display: flex;
+  justify-content: center;
+  img {
+    width: 500px;
+    height: 200px;
+  }
+}
+
+.boards {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.input-area {
+  margin: 50px 0px;
+  display: flex;
+
+  input {
+    width: 90%;
+    margin-right: 20px;
+    border: none;
+    border-bottom: 1px solid black;
+  }
+  input:focus {
+    outline: none;
+  }
+
+  .icon {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+  .enter-icon {
+    cursor: pointer;
+  }
+}

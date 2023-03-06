@@ -1,0 +1,29 @@
+{
+  "comments": [
+    {
+      "id": 0,
+      "content": "잠자기",
+      "delete": false
+    },
+    {
+      "id": 1,
+      "content": "잘먹기",
+      "delete": false
+    },
+    {
+      "id": 2,
+      "content": "공부하기",
+      "delete": false
+    },
+    {
+      "content": "ddd",
+      "delete": false,
+      "id": 3
+    },
+    {
+      "content": "내용추가",
+      "delete": false,
+      "id": 4
+    }
+  ]
+}
