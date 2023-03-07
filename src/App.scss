@@ -2,7 +2,7 @@
   display: flex;
   justify-content: center;
   img {
-    width: 500px;
+    width: 400px;
     height: 200px;
   }
 }
@@ -34,5 +34,7 @@
   }
   .enter-icon {
     cursor: pointer;
+    font-size: 20px;
+    margin-left: 20px;
   }
 }

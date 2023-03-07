@@ -18,7 +18,7 @@ function App() {
 
   useEffect(() => {
     postCard();
-  }, []);
+  }, [comment.content]);
 
   // const addCard = (e) => {
   //   if (text.current.value === '') {
@@ -29,7 +29,7 @@ function App() {
   //   }
   // };
 
-  const postCard = (e) => {
+  const postCard = () => {
     if (text.current.value === '') {
       alert('내용을 입력하세요');
       return;
@@ -42,6 +42,7 @@ function App() {
         .then((res) => {
           getCard();
           alert('생성이 완료되었습니다');
+          setComment(comment);
         });
     }
   };
@@ -61,7 +62,7 @@ function App() {
       </div>
 
       <Col className='boards'>
-        <Board comment={comment} title={'Todo'} />
+        <Board comment={comment} setComment={setComment} title={'Todo'} />
         <Board title={'Doing'} />
         <Board title={'Done'} />
       </Col>
@@ -73,7 +74,7 @@ function App() {
           placeholder='내용을 작성하세요'
         />
         <div className='icon'>
-          <GrUploadOption className='enter-icon' onClick={() => postCard()} />
+          <GrUploadOption className='enter-icon' onClick={postCard} />
           <BsMicFill className='enter-icon' />
         </div>
       </form>
