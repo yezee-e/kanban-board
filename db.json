@@ -9,6 +9,11 @@
       "content": "dd",
       "delete": false,
       "id": 3
+    },
+    {
+      "content": "sss",
+      "delete": false,
+      "id": 4
     }
   ],
   "inProgress": [
@@ -19,11 +24,6 @@
     }
   ],
   "Completed": [
-    {
-      "id": 0,
-      "content": "치킨먹기",
-      "delete": false
-    },
     {
       "id": 2,
       "content": "국밥먹기",

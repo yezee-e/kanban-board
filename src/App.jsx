@@ -74,30 +74,6 @@ function App() {
       );
   };
 
-  const putCard = (items) => {
-    const data = items.map((item) => item.content);
-    console.log(data);
-    axios
-      .put(`http://localhost:3004/todos`, {
-        ...items,
-      })
-      .then((res) => {
-        console.log('해냄');
-      });
-
-    // axios
-    //   .all([
-    //     axios.put(`http://localhost:3004/todos`),
-    //     axios.put(`http://localhost:3004/inProgress`),
-    //     axios.put(`http://localhost:3004/completed`),
-    //   ])
-    //   .then(
-    //     axios.spread((res1, res2, res3) => {
-    //       res1 = items;
-    //     })
-    //   );
-  };
-
   const { listen, listening, stop } = useSpeechRecognition({
     onResult: (result) => {
       setspeech(result);
@@ -114,10 +90,10 @@ function App() {
 
       //같은 보드안에서 움직임
       const [reorderDrag] = items.splice(DropResult.source.index, 1);
+
       items.splice(DropResult.destination.index, 0, reorderDrag);
       const setData = eval(`set${source.droppableId}`);
       setData(items);
-      putCard(items);
     }
     if (destination?.droppableId !== source.droppableId) {
       const items = Array.from(eval(source.droppableId));
