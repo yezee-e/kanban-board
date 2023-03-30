@@ -1,3 +1,20 @@
+.board-area {
+  width: 500px;
+  min-height: 400px;
+  background-color: rgb(232, 232, 232);
+  color: rgb(49, 45, 45);
+  border-radius: 20px;
+  font-size: 25px;
+  font-weight: 500;
+  padding: 0 20px;
+  padding-bottom: 20px;
+}
+
+.board-title {
+  margin: 20px 0 0 20px;
+  text-align: center;
+}
+
 .card-area {
   display: flex;
   flex-direction: column;
@@ -10,8 +27,6 @@
   margin: 10px 0;
   font-size: 15px;
   height: 60px;
-  width: 90%;
-  cursor: grab;
 
   .todo-data {
     display: flex;

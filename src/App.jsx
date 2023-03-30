@@ -5,29 +5,31 @@
 // 카드 삭제기능 추가
 // 카드 드래그 기능 추가
 
-import Board from './Components/Board';
 import './App.scss';
 import { GrUploadOption } from 'react-icons/gr';
 import { BsMicFill } from 'react-icons/bs';
 import { Container, Col } from 'react-bootstrap';
 import { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
+import { DragDropContext, Droppable } from 'react-beautiful-dnd';
+import TodoBoard from './Components/TodoBoard';
+import DoingBoard from './Components/DoingBoard';
+import DoneBoard from './Components/DoneBoard';
+import { useSpeechRecognition } from 'react-speech-kit';
 
 function App() {
-  const [comment, setComment] = useState([]);
+  const [todos, settodos] = useState([]);
+  const [inProgress, setinProgress] = useState([]);
+  const [complete, setcomplete] = useState([]);
+  const [comment, setcomment] = useState([]);
+  const [toggle, setToggle] = useState(false);
+  const [speech, setspeech] = useState('');
+
+  const BoardTitle = ['todo', 'In-Progress', 'Complete'];
 
   useEffect(() => {
-    postCard();
-  }, [comment.content]);
-
-  // const addCard = (e) => {
-  //   if (text.current.value === '') {
-  //     e.preventDefault();
-  //     alert('내용을 입력하세요');
-  //   } else {
-  //     postCard();
-  //   }
-  // };
+    getCard();
+  }, []);
 
   const postCard = () => {
     if (text.current.value === '') {
@@ -35,14 +37,15 @@ function App() {
       return;
     } else {
       axios
-        .post(`http://localhost:3004/comments`, {
+        .post('http://localhost:3004/todos', {
           content: text.current.value,
           delete: false,
         })
         .then((res) => {
-          getCard();
           alert('생성이 완료되었습니다');
-          setComment(comment);
+          getCard();
+          setcomment(res.data);
+          text.current.value = '';
         });
     }
   };
@@ -51,33 +54,149 @@ function App() {
 
   const getCard = () => {
     axios
-      .get(`http://localhost:3004/comments`)
-      .then((res) => setComment(res.data));
+      .all([
+        axios.get(`http://localhost:3004/todos`),
+        axios.get(`http://localhost:3004/inProgress`),
+        axios.get(`http://localhost:3004/completed`),
+      ])
+      .then(
+        axios.spread((res1, res2, res3) => {
+          const data1 = res1.data;
+          const data2 = res2.data;
+          const data3 = res3.data;
+          const res = [...data1, ...data2, ...data3];
+
+          settodos(data1);
+          setinProgress(data2);
+          setcomplete(data3);
+          setcomment(res);
+        })
+      );
   };
+
+  const putCard = (items) => {
+    const data = items.map((item) => item.content);
+    console.log(data);
+    axios
+      .put(`http://localhost:3004/todos`, {
+        ...items,
+      })
+      .then((res) => {
+        console.log('해냄');
+      });
+
+    // axios
+    //   .all([
+    //     axios.put(`http://localhost:3004/todos`),
+    //     axios.put(`http://localhost:3004/inProgress`),
+    //     axios.put(`http://localhost:3004/completed`),
+    //   ])
+    //   .then(
+    //     axios.spread((res1, res2, res3) => {
+    //       res1 = items;
+    //     })
+    //   );
+  };
+
+  const { listen, listening, stop } = useSpeechRecognition({
+    onResult: (result) => {
+      setspeech(result);
+      console.log('들어보자', speech);
+      text.current.value = speech;
+    },
+  });
+
+  function handleOnDragEnd(DropResult) {
+    const { destination, source } = DropResult;
+    if (!destination) return; //경로를 벗어나면 오류를 일으키지 않고 원위치 시켜준다
+    if (destination?.droppableId === source.droppableId) {
+      const items = Array.from(eval(source.droppableId));
+
+      //같은 보드안에서 움직임
+      const [reorderDrag] = items.splice(DropResult.source.index, 1);
+      items.splice(DropResult.destination.index, 0, reorderDrag);
+      const setData = eval(`set${source.droppableId}`);
+      setData(items);
+      putCard(items);
+    }
+    if (destination?.droppableId !== source.droppableId) {
+      const items = Array.from(eval(source.droppableId));
+      const boardData = Array.from(eval(destination.droppableId));
+      //다른 보드 안에서 움직임
+      const [reorderDrag] = items.splice(DropResult.source.index, 1);
+      boardData.splice(DropResult.destination.index, 0, reorderDrag);
+      const setDData = eval(`set${source.droppableId}`);
+      setDData(items);
+      const setData = eval(`set${destination.droppableId}`);
+      setData(boardData);
+    }
+  }
 
   return (
     <Container>
       <div className='logo-area'>
         <img src='pic/logo.png' alt='logo' className='logo' />
       </div>
-
-      <Col className='boards'>
-        <Board comment={comment} setComment={setComment} title={'Todo'} />
-        <Board title={'Doing'} />
-        <Board title={'Done'} />
-      </Col>
-      <form className='input-area' action='submit'>
+      <DragDropContext onDragEnd={handleOnDragEnd}>
+        <Col className='boards'>
+          <Droppable droppableId='todos'>
+            {(provided) => (
+              <div
+                className='board-area'
+                {...provided.droppableProps}
+                ref={provided.innerRef}
+              >
+                <div className='board-title'>todo</div>
+                <TodoBoard content={todos} get={getCard} />
+                {provided.placeholder}
+              </div>
+            )}
+          </Droppable>
+          <Droppable droppableId='inProgress'>
+            {(provided) => (
+              <div
+                className='board-area'
+                {...provided.droppableProps}
+                ref={provided.innerRef}
+              >
+                <div className='board-title'>In-Progress</div>
+                <DoingBoard content={inProgress} get={getCard} />
+                {provided.placeholder}
+              </div>
+            )}
+          </Droppable>
+          <Droppable droppableId='complete'>
+            {(provided) => (
+              <div
+                className='board-area'
+                {...provided.droppableProps}
+                ref={provided.innerRef}
+              >
+                <div className='board-title'>Complete</div>
+                <DoneBoard content={complete} get={getCard} />
+                {provided.placeholder}
+              </div>
+            )}
+          </Droppable>
+        </Col>
+      </DragDropContext>
+      <div className='input-area'>
         <input
           type='text'
           ref={text}
           maxLength={500}
-          placeholder='내용을 작성하세요'
+          placeholder='할일을 말하거나 적어보세요~~!!'
+          autoComplete='off'
         />
         <div className='icon'>
           <GrUploadOption className='enter-icon' onClick={postCard} />
-          <BsMicFill className='enter-icon' />
+          <BsMicFill
+            className='enter-icon'
+            onMouseDown={listen}
+            onMouseUp={stop}
+          />
         </div>
-      </form>
+      </div>
     </Container>
   );
 }

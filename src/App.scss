@@ -16,15 +16,23 @@
 .input-area {
   margin: 50px 0px;
   display: flex;
+  justify-content: center;
+  flex-direction: center;
+  align-items: center;
 
   input {
-    width: 90%;
+    width: 50%;
     margin-right: 20px;
     border: none;
     border-bottom: 1px solid black;
+    padding: 10px;
   }
   input:focus {
     outline: none;
+  }
+
+  input::placeholder {
+    text-align: center;
   }
 
   .icon {

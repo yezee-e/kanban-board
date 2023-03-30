@@ -1,19 +1,33 @@
 {
-  "comments": [
+  "todos": [
+    {
+      "content": "a",
+      "delete": false,
+      "id": 2
+    },
+    {
+      "content": "dd",
+      "delete": false,
+      "id": 3
+    }
+  ],
+  "inProgress": [
     {
       "id": 0,
-      "content": "잠자기",
+      "content": "코딩하기",
+      "delete": false
+    }
+  ],
+  "Completed": [
+    {
+      "id": 0,
+      "content": "치킨먹기",
       "delete": false
     },
     {
-      "content": "잘먹기",
-      "delete": false,
-      "id": 3
-    },
-    {
-      "content": "dfddfsf",
-      "delete": false,
-      "id": 4
+      "id": 2,
+      "content": "국밥먹기",
+      "delete": false
     }
   ]
 }
