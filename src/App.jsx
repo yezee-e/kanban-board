@@ -37,10 +37,13 @@ function App() {
       return;
     } else {
       axios
-        .post('http://localhost:3004/todos', {
-          content: text.current.value,
-          delete: false,
-        })
+        .post(
+          'https://my-json-server.typicode.com/yezee-e/kanban-board/todos',
+          {
+            content: text.current.value,
+            delete: false,
+          }
+        )
         .then((res) => {
           alert('생성이 완료되었습니다');
           getCard();
@@ -55,9 +58,15 @@ function App() {
   const getCard = () => {
     axios
       .all([
-        axios.get(`http://localhost:3004/todos`),
-        axios.get(`http://localhost:3004/inProgress`),
-        axios.get(`http://localhost:3004/completed`),
+        axios.get(
+          'https://my-json-server.typicode.com/yezee-e/kanban-board/todos'
+        ),
+        axios.get(
+          `https://my-json-server.typicode.com/yezee-e/kanban-board/inProgress`
+        ),
+        axios.get(
+          `https://my-json-server.typicode.com/yezee-e/kanban-board/completed`
+        ),
       ])
       .then(
         axios.spread((res1, res2, res3) => {
