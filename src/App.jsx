@@ -7,7 +7,8 @@
 
 import './App.scss';
 import { GrUploadOption } from 'react-icons/gr';
-import { BsMicFill } from 'react-icons/bs';
+import { BsMicFill, BsFillMicMuteFill } from 'react-icons/bs';
+
 import { Container, Col } from 'react-bootstrap';
 import { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
@@ -15,7 +16,6 @@ import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 import TodoBoard from './Components/TodoBoard';
 import DoingBoard from './Components/DoingBoard';
 import DoneBoard from './Components/DoneBoard';
-import { useSpeechRecognition } from 'react-speech-kit';
 
 function App() {
   const [todos, settodos] = useState([]);
@@ -37,13 +37,10 @@ function App() {
       return;
     } else {
       axios
-        .post(
-          'https://my-json-server.typicode.com/yezee-e/kanban-board/todos',
-          {
-            content: text.current.value,
-            delete: false,
-          }
-        )
+        .post('http://localhost:3004/todos', {
+          content: text.current.value,
+          delete: false,
+        })
         .then((res) => {
           alert('생성이 완료되었습니다');
           getCard();
@@ -58,15 +55,9 @@ function App() {
   const getCard = () => {
     axios
       .all([
-        axios.get(
-          'https://my-json-server.typicode.com/yezee-e/kanban-board/todos'
-        ),
-        axios.get(
-          `https://my-json-server.typicode.com/yezee-e/kanban-board/inProgress`
-        ),
-        axios.get(
-          `https://my-json-server.typicode.com/yezee-e/kanban-board/completed`
-        ),
+        axios.get('http://localhost:3004/todos'),
+        axios.get(`http://localhost:3004/inProgress`),
+        axios.get(`http://localhost:3004/completed`),
       ])
       .then(
         axios.spread((res1, res2, res3) => {
@@ -83,13 +74,27 @@ function App() {
       );
   };
 
-  const { listen, listening, stop } = useSpeechRecognition({
-    onResult: (result) => {
-      setspeech(result);
-      console.log('들어보자', speech);
-      text.current.value = speech;
-    },
-  });
+  const SpeechRecognition =
+    window.SpeechRecognition || window.webkitSpeechRecognition;
+
+  const recognition = new SpeechRecognition();
+  recognition.interimResult = true;
+  recognition.lang = 'ko-KR';
+  recognition.onresult = function (e) {
+    const record = e.results[0][0].transcript;
+    text.current.value = record;
+  };
+
+  if (!SpeechRecognition) {
+    alert('현재 브라우저는 사용이 불가능합니다.');
+  }
+  if (SpeechRecognition) {
+    if (toggle) {
+      recognition.start();
+    } else {
+      recognition.stop();
+    }
+  }
 
   function handleOnDragEnd(DropResult) {
     const { destination, source } = DropResult;
@@ -175,11 +180,14 @@ function App() {
         />
         <div className='icon'>
           <GrUploadOption className='enter-icon' onClick={postCard} />
-          <BsMicFill
+          <div
             className='enter-icon'
-            onMouseDown={listen}
-            onMouseUp={stop}
-          />
+            // onMouseDown={listen}
+            // onMouseUp={stop}
+            onClick={() => setToggle(!toggle)}
+          >
+            {toggle ? <BsMicFill /> : <BsFillMicMuteFill />}
+          </div>
         </div>
       </div>
     </Container>

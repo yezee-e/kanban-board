@@ -11,14 +11,10 @@ function DoneBoard({ content, get }) {
 
   const onDelete = (task) => {
     if (window.confirm('삭제하시겠습니까?')) {
-      axios
-        .delete(
-          `https://my-json-server.typicode.com/yezee-e/kanban-board/completed/${task.id}`
-        )
-        .then((res) => {
-          alert('삭제완료');
-          get();
-        });
+      axios.delete(`http://localhost:3004/completed/${task.id}`).then((res) => {
+        alert('삭제완료');
+        get();
+      });
     }
   };
 
