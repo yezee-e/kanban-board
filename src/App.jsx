@@ -37,7 +37,7 @@ function App() {
       return;
     } else {
       axios
-        .post('http://localhost:3004/todos', {
+        .post('https://talking-kanban.herokuapp.com/todos', {
           content: text.current.value,
           delete: false,
         })
@@ -55,9 +55,9 @@ function App() {
   const getCard = () => {
     axios
       .all([
-        axios.get('http://localhost:3004/todos'),
-        axios.get(`http://localhost:3004/inProgress`),
-        axios.get(`http://localhost:3004/completed`),
+        axios.get('https://talking-kanban.herokuapp.com/todos'),
+        axios.get(`https://talking-kanban.herokuapp.com/inProgress`),
+        axios.get(`https://talking-kanban.herokuapp.com/completed`),
       ])
       .then(
         axios.spread((res1, res2, res3) => {
