@@ -12,7 +12,9 @@ function DoneBoard({ content, get }) {
   const onDelete = (task) => {
     if (window.confirm('삭제하시겠습니까?')) {
       axios
-        .delete(`https://talking-kanban.herokuapp.com/completed/${task.id}`)
+        .delete(
+          `https://talking-kanbanboard.herokuapp.com/completed/${task.id}`
+        )
         .then((res) => {
           alert('삭제완료');
           get();
