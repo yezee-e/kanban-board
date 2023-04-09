@@ -23,7 +23,6 @@ function App() {
   const [complete, setcomplete] = useState([]);
   const [comment, setcomment] = useState([]);
   const [toggle, setToggle] = useState(false);
-  const [speech, setspeech] = useState('');
 
   const BoardTitle = ['todo', 'In-Progress', 'Complete'];
 
