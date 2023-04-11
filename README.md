@@ -119,16 +119,18 @@ URL로 받아온 데이터의 키값을 얻지 못해서 string타입을 변수�
 
 시작 state에서 도착한 state로 데이터를 옮겨주기 위해 eval()함수를 사용해서 stirng값을 변수로 바꿔서 넣어주었다
 
+<img src='pic/dragdrop.png'> <br>
+
 <br/>
 
 #### 📌 heroku 배포
 
 간단하게 배포가 가능한 netlify로 배포를 시도하였다.
-문제는 netlify는 정적 사이트만 배포가 가능해서 json-server를 사용한 kanban app이 정상적으로 동작하지 않았다.   
-그래서 Heroku로 다시 배포를 진행하였다.   
-백엔드작업을 node server파일을 만들어서 진행하였는데 이때 많은 에러를 직면하게 되었다.   
-<pic src=""> <br>
-위와 같은 에러가 계속해서 나타났고 아래와 같은 다양한 시도를 하였다.   
+문제는 netlify는 정적 사이트만 배포가 가능해서 json-server를 사용한 kanban app이 정상적으로 동작하지 않았다.  
+그래서 Heroku로 다시 배포를 진행하였다.  
+백엔드작업을 node server파일을 만들어서 진행하였는데 이때 많은 에러를 직면하게 되었다.  
+<img src='pic/heroku.png'> <br>
+위와 같은 에러가 계속해서 나타났고 아래와 같은 다양한 시도를 하였다.  
  **시도 1 :** package.json scripts에 heroku-postbuild를 추가한다. (실패)  
  **시도 2 :** 환경변수와 빌드팩의 문제라고 생각해서 heroku에서 환경변수를 세팅하고 `heroku buildpacks:set mars/create-react-app`
 빌드팩을 추가한다. (실패)  
