@@ -1,6 +1,6 @@
 # Talking kanban-board
 
-> P가 J가 되는 칸반보드  
+> P에서 J가 되는 칸반보드  
 > **URL** https://talking-kanbanboard.herokuapp.com/
 
 ## 1.참여인원
